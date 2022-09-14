@@ -1,0 +1,328 @@
+\documentclass{article}
+
+% Language setting
+% Replace `English' with e.g. `Spanish' to change the document language
+\usepackage[english]{babel}
+\usepackage{ctex}
+
+% Set page size and margins
+% Replace `letter paper' with`a4paper' for UK/EU standard size
+\usepackage[a4paper,top=1.5cm,bottom=1.5cm,left=2cm,right=2cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage[ruled]{algorithm2e}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\SetKwProg{Function}{function}{:}{end}
+
+% TODO 个人信息参数全局变量
+% -------------- define personal variables begin --------------
+\newcommand\myCollege{[college name]}
+\newcommand\myId{[author id]}
+\newcommand\myName{[author name]}
+\newcommand\myHomeworkId{[homework id]}
+% --------------  define personal variables end  --------------
+
+\title{\heiti \myCollege《算法设计与分析》第\myHomeworkId 次作业} % 文章标题
+\author{\myCollege \quad \myId \quad \myName} % 作者信息
+
+\begin{document}
+\maketitle
+
+\section{[作业题目1]} % TODO 作业题目1名字
+
+\subsection{[作业题目1.1]} % TODO 作业题目1.1名字
+
+% TODO 大括号样例
+
+$$
+T(n)=\left\{
+\begin{array}{l}
+1\ ,\ n=1\\
+T(n-2)+3n\ ,\ n>1
+\end{array}
+\right.
+$$
+
+$T(n)=T(n-2)+3n=T(n-4)+3n+3(n-2)=T(n-6)+3n+3(n-2)+3(n-4)=...$
+
+\qquad\ $=3n+3(n-2)+3(n-4)+...+9+1=\frac{1}{2}(3n+9)(\frac{3n-9}{6}+1)+1=O(n^2)$
+
+由此可知，原式渐进上界为$O(n^2)$。
+
+
+
+\qquad$n=1$时，对$c\ge1$结论显然成立；
+
+\qquad$n>1$时，有：$T(n)=T(n/2)+2^n$
+
+\qquad\qquad\qquad\qquad\qquad\quad$\le{c}2^\frac{n}{2}+2^n$
+
+\qquad\qquad\qquad\qquad\qquad\quad$=c2^n-(c-1)2^n+c2^\frac{n}{2}$
+
+\qquad\qquad\qquad\qquad\qquad\quad$=c2^n-((c-1)2^\frac{n}{2}-c)2^\frac{n}{2}$
+
+\qquad\qquad\qquad\qquad\qquad\quad$\le{c}2^n-(2(c-1)-c)2^\frac{n}{2}$
+
+\qquad\qquad\qquad\qquad\qquad\quad$=c2^n-(c-2)2^\frac{n}{2}$
+
+显然，只要$c\ge2$，就有$T(n)\le{c2^n}$成立，从而原式渐进上界为$O(2^n)$。
+
+\subsection{[作业题目1.2]} % TODO 作业题目1.2名字
+
+$$
+T(n)=\left\{
+\begin{array}{l}
+1\ ,\ n=1\\
+8T(n/4)+2n\ ,\ n>1
+\end{array}
+\right.
+$$
+
+使用主方法计算渐进上界，注意到$2n=O(n)$，由上式可知$a=8,b=4,d=1$，由$d<log_b a$，可得上式的渐进上界为$O(n^{log_b a})=O(n^\frac{3}{2})$。
+
+
+\section{[作业题目2]} % TODO 作业题目2名字
+
+% TODO 作业题目2描述
+
+现有$k$个有序数组（从小到大排序），每个数组中包含$n$个元素。你的任务是将他们合并成$1$个包含$kn$个元素的有序数组。首先来回忆一下课上讲的归并排序算法，它提供了一种合并有序数组的算法$Merge$。如果我们有两个有序数组的大小分别为$x$和$y$，$Merge$算法可以用$O(x+y)$的时间来合并这两个数组。
+
+\subsection{[作业题目2分析]} % TODO 作业题目2分析
+
+如果我们应用$Merge$算法先合并第一个和第二个数组，然后由合并后的数组与第三个合并，再与第四个合并，直到合并完$k$个数组。请分析这种合并策略的时间复杂度（请用关于$k$和$n$的函数表示）。
+
+显然，第一次合并的复杂度为$O(n+n)$，第二次合并的复杂度为$O(2n+n)$，第三次合并的复杂度为$O(3n+n)$，以此类推，第$k-1$次合并的复杂度为$O((k-1)n+n)$。
+
+从而总复杂度为$n+2n+...+(k-1)n=\frac{1}{2}k(k-1)n=O(nk^2)$。
+
+\subsection{[作业题目2算法与伪代码]} % 作业题目2算法与伪代码
+
+针对本题的任务，请给出一个更高效的算法，并分析它的时间复杂度（此题若取得满分，所设计算法的时间复杂度应为$O(n k log k)$）。
+
+分析题目，只要使用优先队列维护$k$个有序数组未归并部分首个元素的集合即可，每次从优先队列中取出一个元素归并，再将提供被取出元素的数组的下一元素插入优先队列，这样共需要处理$k n$个元素，又因为优先队列的大小为$k$，每个元素的处理时间为$log k$，即得到$O(n k log k)$的时间复杂度，伪代码如下。
+
+% TODO 伪代码模板
+
+\begin{algorithm}[H]
+
+\caption{k路归并问题优化做法}
+\LinesNumbered
+\KwIn{正整数$n$，为数组长度，正整数$k$，为数组个数，$k$个长度为$n$的数组$A[]$}
+\KwOut{长度为$n k$的数组$Ans$，为归并后的数组}
+
+$global\ pointer[k]$
+
+\Function{$main(n,k,A)$}{
+    \For{$i\leftarrow0\ to\ k-1$}{
+        $pointer[i] \leftarrow 0$\;
+        $push\ (A[i][pointer[i]],i)\ to\ priority\_queue$\;
+    }
+    \For{$i\leftarrow0\ to\ n k-1$}{
+        $(val,index) \leftarrow top\ of\ priority\_queue$\;
+        $remove\ top\ from\ priority\_queue$\;
+        $Ans[i] \leftarrow val$\;
+        $pointer[index] \leftarrow pointer[index]+1$\;
+        \If{$pointer[index]<{length\ of\ A[index]}$}{
+            $push\ (A[index][pointer[index]],index)\ to\ priority\_queue$\;
+        }
+    }
+    \textbf{$return$}\; 
+}
+
+\end{algorithm}
+
+\begin{algorithm}[H]
+
+\caption{填数字问题朴素做法}
+\LinesNumbered
+\KwIn{正整数$n$，为数组长度}
+\KwOut{长度为$n$的数组$A$，为填充后的数组}
+
+\Function{$main(n)$}{
+    $push\ (0,n-1)\ to\ priority\_queue$\;
+    \For{$i\leftarrow1\ to\ n$}{
+        $(l,r) \leftarrow top\ of\ priority\_queue$\;
+        $remove\ top\ from\ priority\_queue$\;
+        $mid \leftarrow (l+r)/2$\;
+        $A[mid] \leftarrow i$\;
+        \If{$mid-1\ge{l}$}{
+            $push\ (l,mid-1)\ to\ priority\_queue$\;
+        }
+        \If{$r\ge{mid+1}$}{
+            $push\ (mid+1,r)\ to\ priority\_queue$\;
+        }
+    }
+    \textbf{$return\ A$}\; 
+}
+
+\end{algorithm}
+
+\begin{algorithm}[H]
+
+\caption{填数字问题优化做法}
+\LinesNumbered
+\KwIn{正整数$n$，为数组长度}
+\KwOut{长度为$n$的数组$A$，为填充后的数组}
+
+$global\ list[n]$\;
+
+\Function{$search(l,r)$}{
+    $mid \leftarrow (l+r)/2$\;
+    $insert\ mid\ to\ head\ of\ list[r-l+1]$\;
+    \If{$r\ge{mid+1}$}{
+        $call\ search(mid+1,r)$\;
+    }
+    \If{$mid-1\ge{l}$}{
+        $call\ search(l,mid-1)$\;
+    }
+}
+
+\Function{$main(n)$}{
+    $call\ search(0,n-1)$\;
+    $count \leftarrow 1$\;
+    \For{$i\leftarrow{n}\ to\ 1$}{
+        \For{$j\leftarrow{head\ of\ list[i]}\ to\ tail\ of\ list[i]$}{
+            $A[value\ of\ j] \leftarrow count$\;
+            $count \leftarrow count+1$\;
+        }
+    }
+    \textbf{$return\ A$}\; 
+}
+
+\end{algorithm}
+
+\section{[附录暨部分算法的实现]} %TODO 代码附录
+
+\subsection{填数字问题朴素做法与测试数据生成}
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\lstset{
+    backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+    basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+    breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+    breaklines=true,                 % sets automatic line breaking
+    captionpos=bl,                   % sets the caption-position to bottom
+    commentstyle=\color{mygreen},    % comment style
+    deletekeywords={...},            % if you want to delete keywords from the given language
+    escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+    extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+    frame=single,                    % adds a frame around the code
+    keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+    keywordstyle=\color{blue},       % keyword style
+    language=c++,                    % the language of the code
+    morekeywords={*,...},            % if you want to add more keywords to the set
+    numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+    numbersep=5pt,                   % how far the line-numbers are from the code
+    numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+    rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+    showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+    showstringspaces=false,          % underline spaces within strings only
+    showtabs=false,                  % show tabs within strings adding particular underscores
+    stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+    stringstyle=\color{mymauve},     % string literal style
+    tabsize=2,                       % sets default tabsize to 2 spaces
+}
+
+\begin{lstlisting}
+#include <queue>
+#include <cstdio>
+using namespace std;
+
+struct Node
+{
+	int l,r,len;
+
+	inline Node(int l,int r)
+	{
+		this->l=l,this->r=r;
+		len=r-l+1; return;
+	}
+
+	inline bool operator<(const Node& rhs) const
+	{
+		if (this->len<rhs.len) return true;
+		if (this->len>rhs.len) return false;
+		return this->l>rhs.l;
+	}
+
+	inline bool operator>(const Node& rhs) const
+	{
+		if (this->len>rhs.len) return true;
+		if (this->len<rhs.len) return false;
+		return this->l<rhs.l;
+	}
+};
+
+int a[10005];
+
+int main()
+{
+	int n=10000;
+	freopen("testcase.txt","w",stdout);
+	printf("%d\n",n);
+	priority_queue<Node> pq;
+	Node node(0,n-1); pq.push(node);
+	for (int i=1,l,r;i<=n;i++)
+	{
+		Node node=pq.top(); pq.pop();
+		l=node.l,r=node.r;
+		// printf("%d %d\n",l,r);
+		int mid=(l+r)>>1;
+		a[mid]=i;
+		if (mid-1>=l) {Node newNode(l,mid-1); pq.push(newNode);}
+		if (r>=mid+1) {Node newNode(mid+1,r); pq.push(newNode);}
+	}
+	for (int i=0;i<n;i++)
+	printf("%d\n",a[i]);
+	return 0;
+}
+\end{lstlisting}
+
+\subsection{填数字问题优化做法与自动对拍}
+
+\begin{lstlisting}
+#include <cstdio>
+#include <vector>
+using namespace std;
+
+int a[10005];
+int tot,fst[10005],nxt[10005],val[10005];
+
+void build(int l,int r)
+{
+	nxt[++tot]=fst[r-l+1],fst[r-l+1]=tot;
+	int mid=(l+r)>>1; val[tot]=mid;
+	if (r>=mid+1) build(mid+1,r);
+	if (mid-1>=l) build(l,mid-1);
+	return;
+}
+
+int main()
+{
+	int n,cnt=0;
+	freopen("testcase.txt","r",stdin);
+	scanf("%d",&n);
+	build(0,n-1);
+	for (int i=n;i>0;i--)
+	for (int j=fst[i];j;j=nxt[j])
+	a[val[j]]=++cnt;
+	for (int i=0;i<n;i++) printf("%d\n",a[i]);
+	bool isRight=true;
+	for (int i=0,std;i<n;i++)
+	{
+		scanf("%d",&std);
+		if (a[i]!=std) isRight=false;
+	}
+	printf(isRight?"AC\n":"WA\n");
+	return 0;
+}
+\end{lstlisting}
+
+\end{document}
