@@ -11,6 +11,8 @@
 
 % Useful packages
 \usepackage{amsmath}
+\usepackage{amssymb}
+% 引入{amssymb}包，避免输入\nexists(存在否定)这个符号时 报未定义符号的错误
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage[ruled]{algorithm2e}
@@ -130,7 +132,8 @@ $global\ pointer[k]$
             $push\ (A[index][pointer[index]],index)\ to\ priority\_queue$\;
         }
     }
-    \textbf{$return$}\; 
+    %\textbf{$return$}\; 
+    \Return{}\;
 }
 
 \end{algorithm}
@@ -156,7 +159,8 @@ $global\ pointer[k]$
             $push\ (mid+1,r)\ to\ priority\_queue$\;
         }
     }
-    \textbf{$return\ A$}\; 
+    %\textbf{$return\ A$}\; 
+    \Return{$A$}\;
 }
 
 \end{algorithm}
@@ -190,7 +194,8 @@ $global\ list[n]$\;
             $count \leftarrow count+1$\;
         }
     }
-    \textbf{$return\ A$}\; 
+    %\textbf{$return\ A$}\; 
+    \Return{$A$}\;
 }
 
 \end{algorithm}
